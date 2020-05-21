@@ -2,7 +2,7 @@ rockspec_format = "3.0"
 package = "graphlua"
 version = "dev-1"
 source = {
-   url = ""
+   url = "git+https://github.com/jsalzbergedu/luagraph.git"
 }
 description = {
    homepage = "",
