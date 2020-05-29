@@ -80,7 +80,23 @@ graph.vertex = recordtype.new("vertex",
                                        new_vtx[k] = v
                                     end
                                  end
-                                 return graph.vertex.factory(new_vtx)
+                                 local constructed = graph.vertex.factory(new_vtx)
+                                 local mt = getmetatable(constructed)
+                                 local nmt = {}
+                                 for k, v in pairs(mt) do
+                                    nmt[k] = v
+                                 end
+                                 function nmt.__eq(v1, v2)
+                                    return v1.data == v2.data
+                                 end
+                                 function nmt.__lt(v1, v2)
+                                    return v1.data < v2.data
+                                 end
+                                 function nmt.__le(v1, v2)
+                                    return v1.data <= v2.data
+                                 end
+                                 setmetatable(constructed, nmt)
+                                 return constructed
                               end)
 
 --- Remove edge E from the graph,
@@ -127,7 +143,23 @@ graph.edge = recordtype.new("edge",
                                      new_edge[k] = v
                                   end
                                end
-                               return graph.edge.factory(new_edge)
+                               local constructed = graph.edge.factory(new_edge)
+                               local mt = getmetatable(constructed)
+                               local nmt = {}
+                               for k, v in pairs(mt) do
+                                  nmt[k] = v
+                               end
+                               function nmt.__lt(e1, e2)
+                                  return e1.data < e2.data
+                               end
+                               function nmt.__eq(e1, e2)
+                                  return e1.data == e2.data
+                               end
+                               function nmt.__le(e1, e2)
+                                  return e1.data <= e2.data
+                               end
+                               setmetatable(constructed, nmt)
+                               return constructed
                             end)
 
 
