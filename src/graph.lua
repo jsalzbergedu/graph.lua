@@ -1,6 +1,6 @@
-recordtype = require('lua-graph.lua-modules.recordtype')
-list = require('lua-graph.lua-modules.list')
-double = require('lua-graph.double')
+local recordtype = require('lua-graph.lua-modules.recordtype')
+local list = require('lua-graph.lua-modules.list')
+local double = require('lua-graph.double')
 
 local graph = {}
 
@@ -504,8 +504,8 @@ end
 --- and ran this algorithm starting at apple,
 --- It would return something that looks like this:
 --- ({"apple", "carrot", "bannana"},
----  {("apple", "carrot", true),
----   ("carrot", "bannana", true)}
+---  {("apple", "carrot", <edge>),
+---   ("carrot", "bannana", <edge>)}
 --- (Of course wrapped in another layer of vertex objects)
 function graph.spanning_tree(v)
    assert(graph.vertex.is(v), "V is not a vertex")
@@ -522,13 +522,13 @@ function graph.spanning_tree(v)
       for other_vertex, edge in pairs(vertex.adjacencies) do
          if found_verticies[other_vertex] == nil then
             found_verticies[other_vertex] = out:insert_vertex(other_vertex)
-            out:insert_edge(found_verticies[vertex], found_verticies[other_vertex], true)
+            out:insert_edge(found_verticies[vertex], found_verticies[other_vertex], edge)
             queue.back:insert_before(other_vertex)
          end
       end
    end
 
-   return out
+   return out, found_verticies[v]
 end
 
 --- Get a subgraph that includes
