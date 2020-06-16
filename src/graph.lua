@@ -34,7 +34,7 @@ local function remove_vertex(v)
    v.adjacencies = nil
    v.edges = nil
    v.graph = nil
-   incoming_edges = nil
+   v.incoming_edges = nil
    v.node = nil
 end
 
@@ -101,7 +101,7 @@ graph.vertex = recordtype.new("vertex",
 
 --- Remove edge E from the graph,
 --- and clear out its fields.
-function remove_edge(e)
+local function remove_edge(e)
    if e.graph == nil then
       return
    end
@@ -389,7 +389,7 @@ function graph.plantuml(g, f)
       f = io.stdout
    end
    assert(graph.graph.is(g), "G is not a graph.")
-   found_edges = {}
+   local found_edges = {}
    for vertex in g:verticies() do
       f:write("(", tostring(vertex.data), ")", "\n")
       for other_vertex in g:verticies() do
@@ -547,7 +547,7 @@ function graph.subgraph(v)
       if found_verticies[vertex] == nil then
          found_verticies[vertex] = out:insert_vertex(vertex)
       end
-      for other_vertex, edge in pairs(other_vertex.adjacencies) do
+      for other_vertex, edge in pairs(vertex.adjacencies) do
          if found_verticies[other_vertex] == nil then
             found_verticies[other_vertex] = out:insert_vertex(other_vertex)
          end
